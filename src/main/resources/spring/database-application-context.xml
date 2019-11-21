@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="mainDataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:sample-camel;MODE=PostgreSQL"/>
+        <property name="username" value="protectoria"/>
+        <property name="password" value="protectoria"/>
+        <property name="connectionProperties" value="ApplicationName=sample-camel:main;"/>
+
+        <property name="suppressClose" value="true"/>
+    </bean>
+
+    <bean id="mainTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <constructor-arg name="dataSource" ref="mainDataSource"/>
+    </bean>
+
+    <!-- Setting proxy-target-class="true" to be able to autowire generic transactional services -->
+    <tx:annotation-driven transaction-manager="mainTransactionManager" proxy-target-class="true"/>
+
+</beans>
